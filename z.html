@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Andrew E. - Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+            color: #649b5e;
+        }
+
+        body {
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+            background-color: #0a0a0a;
+            opacity: 0;
+            animation: fadeIn 1s ease-in forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        .image-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+            opacity: 0;
+            animation: zoomIn 1.2s ease-out forwards;
+        }
+
+        @keyframes zoomIn {
+            from { transform: scale(1.1); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .image-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 2;
+            mix-blend-mode: multiply;
+        }
+
+        .container {
+            position: relative;
+            width: 90%;
+            max-width: 800px;
+            margin: 5vh auto;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            border: 1px solid rgba(100, 155, 94, 0.3);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            padding: 2rem;
+            z-index: 4;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideUp 0.8s ease-out 0.4s forwards;
+        }
+
+        @keyframes slideUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .age-highlight {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 1.5rem;
+            border-radius: 30px;
+            display: inline-block;
+            border: 1px solid white;
+            color: white;
+            margin-left: 2rem;
+            animation: fadeIn 0.6s ease-out 0.8s forwards;
+            opacity: 0;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0;
+            color: white;
+        }
+
+        h2 {
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .bio {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            animation: fadeIn 0.6s ease-out 0.6s forwards;
+            opacity: 0;
+        }
+
+        .section {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.15);
+            border-radius: 15px;
+            border: 1px solid rgba(100, 155, 94, 0.1);
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        .skill-link {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            background: rgba(100, 155, 94, 0.15);
+            border-radius: 8px;
+            border: 1px solid #649b5e;
+            display: inline-block;
+        }
+
+        .skill-link:hover {
+            background: rgba(100, 155, 94, 0.25);
+        }
+
+        .project-link {
+            color: #649b5e;
+            text-decoration: none;
+            border-bottom: 1px solid white;
+            transition: all 0.3s ease;
+        }
+
+        .project-link:hover {
+            opacity: 0.8;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 5;
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.closing {
+            animation: fadeOut 0.3s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
+        .modal-content {
+            position: relative;
+            background: rgba(20, 25, 20, 0.95);
+            backdrop-filter: blur(12px);
+            width: 80%;
+            max-width: 700px;
+            margin: 5% auto;
+            padding: 2.5rem;
+            border-radius: 20px;
+            border: 1px solid rgba(100, 155, 94, 0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transform: translateY(20px);
+            opacity: 0;
+            animation: modalOpen 0.3s ease 0.1s forwards;
+        }
+
+        .modal.closing .modal-content {
+            animation: modalClose 0.3s ease forwards;
+        }
+
+        @keyframes modalOpen {
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes modalClose {
+            from { transform: translateY(0); opacity: 1; }
+            to { transform: translateY(20px); opacity: 0; }
+        }
+
+        .close {
+            position: absolute;
+            right: 1.5rem;
+            top: 1.5rem;
+            cursor: pointer;
+            color: #649b5e;
+            font-size: 1.8rem;
+            transition: opacity 0.2s ease;
+            padding: 0 8px;
+            border-radius: 50%;
+        }
+
+        .close:hover {
+            opacity: 0.8;
+            background: rgba(100, 155, 94, 0.1);
+        }
+
+        .experience-box {
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            border-left: 3px solid #649b5e;
+        }
+
+        .experience-box p {
+            margin: 0.8rem 0;
+            padding-left: 1rem;
+            position: relative;
+            line-height: 1.6;
+            color: #e0e0e0;
+        }
+
+        .experience-box p::before {
+            content: "▹";
+            position: absolute;
+            left: -0.5rem;
+            color: #649b5e;
+        }
+
+        .modal h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: #649b5e;
+            border-bottom: 1px solid rgba(100, 155, 94, 0.3);
+            padding-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 1.5rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .header-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .age-highlight {
+                margin: 1rem 0 0 0;
+            }
+            
+            .modal-content {
+                width: 90%;
+                padding: 1.5rem;
+                margin: 10% auto;
+            }
+            
+            .experience-box p {
+                font-size: 0.95rem;
+            }
+            
+            .modal h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="image-container">
+        <img src="https://images.unsplash.com/photo-1604213410393-89f141bb96b8?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8cGFsbSUyMGxlYXZlc3xlbnwwfHwwfHx8MA%3D%3D" alt="Background">
+    </div>
+    
+    <div class="image-overlay"></div>
+
+    <div class="container">
+        <div class="header-container">
+            <h1>Andrew E.</h1>
+            <div class="age-highlight">14-Year-Old Developer</div>
+        </div>
+        
+        <p class="bio">
+            Driven young developer with a passion for creating innovative digital solutions, specializing in frontend and full-stack web development. Proficient in JavaScript, HTML/CSS, Python, and REST API integration. Skilled in automating workflows with webhooks and optimizing user experiences. Additionally, experienced in hardware spoofing techniques for testing and development purposes. Actively involved in game modding projects to expand technical expertise.
+        </p>
+
+        <div class="section">
+            <h2>Featured Projects</h2>
+            <ul style="margin-top: 1rem; list-style: none;">
+                <li>• Lead Developer Of Rocket League Mod Platform</li>
+                <li>• Full-Stack Web Development For <a href="https://glyphajj.github.io/GlyphMod/" class="project-link" target="_blank">GlyphMods</a></li>
+                <li>• Ban Bypass Tool (Spoofer)</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>Skills</h2>
+            <div style="margin-top: 1rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+                <a href="https://glyphajj.github.io/GlyphMod/" class="skill-link" target="_blank">HTML/CSS</a>
+                <a href="https://github.com/GlyphAJJ/Dynamic-Theme-Toggle-Light-Dark-Mode-Integration/blob/main/Light%20and%20Dark%20Mode%20Switch.js" class="skill-link" target="_blank">JavaScript</a>
+                <a href="https://github.com/GlyphAJJ/Ice-Fishing-Macro/blob/main/IceFishingMacro.py.PY" class="skill-link" target="_blank">Python</a>
+                <a href="https://github.com/GlyphAJJ/AJ-s-Tool-Panel-V2/blob/main/AJsToolPanelV2.bat" class="skill-link" target="_blank">Batch</a>
+                <a class="skill-link" onclick="openModal()">More Info</a>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Contact</h2>
+            <p style="margin-top: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                <svg style="width: 24px; height: 24px;" viewBox="0 0 24 24" fill="#649b5e">
+                    <path d="M19.27 5.33C17.94 4.71 16.5 4.26 15 4a.09.09 0 0 0-.07.03c-.18.33-.39.76-.53 1.09a16.09 16.09 0 0 0-4.8 0c-.14-.34-.35-.76-.54-1.09c-.01-.02-.04-.03-.07-.03c-1.5.26-2.93.71-4.27 1.33c-.01 0-.02.01-.03.02c-2.72 4.07-3.47 8.03-3.1 11.95c0 .02.01.04.03.05c1.8 1.32 3.53 2.12 5.24 2.65c.03.01.06 0 .07-.02c.4-.55.76-1.13 1.07-1.74c.02-.04 0-.08-.04-.09c-.57-.22-1.11-.48-1.64-.78c-.04-.02-.04-.08-.01-.11c.11-.08.22-.17.33-.25c.02-.02.05-.02.07-.01c3.44 1.57 7.15 1.57 10.55 0c.02-.01.05-.01.07.01c.11.09.22.17.33.26c.04.03.04.09-.01.11c-.52.31-1.07.56-1.64.78c-.04.01-.05.06-.04.09c.32.61.68 1.19 1.07 1.74c.03.01.06.02.09.01c1.72-.53 3.45-1.33 5.25-2.65c.02-.01.03-.03.03-.05c.44-4.53-.73-8.46-3.1-11.95c-.01-.01-.02-.02-.04-.02zM8.52 14.91c-1.03 0-1.89-.95-1.89-2.12s.84-2.12 1.89-2.12c1.06 0 1.9.96 1.89 2.12c0 1.17-.84 2.12-1.89 2.12zm6.96 0c-1.03 0-1.89-.95-1.89-2.12s.84-2.12 1.89-2.12c1.06 0 1.9.96 1.89 2.12c0 1.17-.83 2.12-1.89 2.12z"/>
+                </svg>
+                <span style="color: #649b5e;">glyphaj</span>
+            </p>
+        </div>
+    </div>
+
+    <div id="experienceModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Junior Full-Stack Web Developer</h2>
+            <div class="experience-box">
+                <p>Over 6 months of practical experience in developing responsive, mobile-first websites</p>
+<p>Proficient in HTML5, CSS3, JavaScript, and Python, with additional expertise in Batch scripting</p>
+<p>Skilled in utilizing webhooks to integrate third-party applications and automate workflows</p>
+<p>Extensive experience in UI/UX design and graphic design, with a focus on optimizing user interfaces and enhancing user experience</p>
+<p>Well-versed in REST API consumption and integrating external data sources to create dynamic, data-driven applications</p>
+<p>Knowledgeable in web performance optimization, ensuring compliance with Core Web Vitals standards for faster, more efficient websites</p>
+<p>Proficient in implementing cross-browser compatibility and adhering to accessibility standards for an inclusive web experience</p>
+<p>Experienced with modern build tools such as Webpack and Vite, and understanding of CI/CD processes to streamline development workflows</p>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openModal() {
+            const modal = document.getElementById('experienceModal');
+            modal.style.display = 'block';
+            modal.classList.remove('closing');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('experienceModal');
+            modal.classList.add('closing');
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 280);
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('experienceModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        window.addEventListener('load', () => {
+            document.body.style.opacity = 1;
+        });
+    </script>
+</body>
+</html>
